@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background-color: #F9F8F6;
+    color: #141414;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-editorial {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+}
+
+/* Staggered hero reveal */
+@keyframes fadeUpReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-1 {
+  animation: fadeUpReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+.animate-hero-2 {
+  animation: fadeUpReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+}
+.animate-hero-3 {
+  animation: fadeUpReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both;
+}
+.animate-hero-4 {
+  animation: fadeUpReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.58s both;
+}
+
+/* Infinite marquee */
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 28s linear infinite;
+}
+
+.marquee-wrapper:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+/* Pulsing lookbook hotspot */
+@keyframes hotspotPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  70% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+.hotspot-ring {
+  animation: hotspotPulse 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+/* Subtle modal & drawer transitions */
+@keyframes modalIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-in {
+  animation: modalIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Heart pop */
+@keyframes heartPop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.32); }
+  100% { transform: scale(1); }
+}
+
+.animate-heart-pop {
+  animation: heartPop 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
