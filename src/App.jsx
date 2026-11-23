@@ -530,12 +530,19 @@ export default function App() {
               </nav>
             </div>
 
-            {/* Brand Wordmark */}
+            {/* Brand Logo & Wordmark */}
             <a
               href="#"
-              className="font-editorial text-lg sm:text-2xl md:text-3xl tracking-[0.15em] sm:tracking-[0.22em] font-light uppercase text-center truncate max-w-[210px] sm:max-w-none"
+              className="flex items-center gap-2.5 sm:gap-3 group select-none py-1"
             >
-              ShreeJi Apparels
+              <img
+                src="/logo.png"
+                alt="ShreeJi Apparels Logo"
+                className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm"
+              />
+              <span className="font-editorial text-lg sm:text-2xl md:text-3xl tracking-[0.14em] sm:tracking-[0.2em] font-light uppercase truncate max-w-[160px] xs:max-w-none">
+                ShreeJi Apparels
+              </span>
             </a>
 
             {/* Right Utilities */}
@@ -708,9 +715,16 @@ export default function App() {
         >
           <div>
             <div className="flex items-center justify-between pb-5 border-b border-[#E5E0D8]">
-              <span className="font-editorial text-xl tracking-[0.2em]">
-                ShreeJi Apparels
-              </span>
+              <div className="flex items-center gap-2.5">
+                <img
+                  src="/logo.png"
+                  alt="ShreeJi Apparels"
+                  className="h-9 w-auto object-contain"
+                />
+                <span className="font-editorial text-xl tracking-[0.18em]">
+                  ShreeJi Apparels
+                </span>
+              </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
                 aria-label="Close menu"
@@ -1403,9 +1417,16 @@ export default function App() {
                   <span className="text-[10px] tracking-[0.24em] uppercase text-[#6E6A63] block mb-1.5 font-medium">
                     Store Address
                   </span>
-                  <h3 className="font-editorial text-2xl sm:text-3xl font-light mb-2">
-                    Shreeji Apparels
-                  </h3>
+                  <div className="flex items-center gap-3 mb-2">
+                    <img
+                      src="/logo.png"
+                      alt="ShreeJi Apparels Logo"
+                      className="h-10 sm:h-12 w-auto object-contain"
+                    />
+                    <h3 className="font-editorial text-2xl sm:text-3xl font-light">
+                      Shreeji Apparels
+                    </h3>
+                  </div>
                   <p className="text-sm text-[#141414]/85 leading-relaxed">
                     Gaytree Puram Colony, Jhanjhari Block,
                     <br />
@@ -1480,9 +1501,16 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16 border-b border-white/10">
             <div className="lg:col-span-5">
-              <p className="font-editorial text-3xl tracking-[0.2em] uppercase mb-4">
-                ShreeJi Apparels
-              </p>
+              <div className="flex items-center gap-3 mb-4">
+                <img
+                  src="/logo.png"
+                  alt="ShreeJi Apparels"
+                  className="h-12 sm:h-14 w-auto object-contain bg-white/10 rounded-sm p-1.5 backdrop-blur-xs"
+                />
+                <p className="font-editorial text-2xl sm:text-3xl tracking-[0.18em] uppercase">
+                  ShreeJi Apparels
+                </p>
+              </div>
               <p className="text-sm text-[#E5E0D8]/70 max-w-sm leading-relaxed">
                 Receive private invitations to seasonal archive sales, atelier
                 appointments, and early access to limited editions.
