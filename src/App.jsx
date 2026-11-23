@@ -12,6 +12,11 @@ import {
   Sparkles,
   Trash2,
   Eye,
+  ChevronDown,
+  Grid,
+  LayoutGrid,
+  Compass,
+  ArrowUp,
 } from 'lucide-react';
 
 // ---------------------------------------------------------------------------
@@ -321,6 +326,10 @@ export default function App() {
   const [pillStyle, setPillStyle] = useState({ left: 0, width: 0 });
   const tabRefs = useRef({});
 
+  // Mobile layout & filter states
+  const [mobileGridCols, setMobileGridCols] = useState(2);
+  const [filterWishlistOnly, setFilterWishlistOnly] = useState(false);
+
   // Wishlist, Cart, Quick View, Lookbook Hotspots
   const [wishlist, setWishlist] = useState(['vs-01']);
   const [heartPulseId, setHeartPulseId] = useState(null);
@@ -372,6 +381,7 @@ export default function App() {
   // Filtered products
   const filteredProducts = useMemo(() => {
     return PRODUCTS.filter((p) => {
+      const matchesWishlist = !filterWishlistOnly || wishlist.includes(p.id);
       const matchesCat =
         activeCategory === 'All' || p.category === activeCategory;
       const q = searchQuery.trim().toLowerCase();
@@ -380,9 +390,9 @@ export default function App() {
         p.name.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q) ||
         p.fabric.toLowerCase().includes(q);
-      return matchesCat && matchesSearch;
+      return matchesWishlist && matchesCat && matchesSearch;
     });
-  }, [activeCategory, searchQuery]);
+  }, [activeCategory, searchQuery, filterWishlistOnly, wishlist]);
 
   // Show temporary toast
   const triggerToast = (message) => {
@@ -478,83 +488,98 @@ export default function App() {
   const heroScale = 1 + Math.min(scrollY * 0.00025, 0.14);
 
   return (
-    <div className="min-h-screen bg-[#F9F8F6] text-[#141414] relative">
+    <div className="min-h-screen bg-[#F9F8F6] text-[#141414] relative pb-20 lg:pb-0">
       {/* ================================================================= */}
       {/* STICKY GLASSMORPHIC HEADER                                        */}
       {/* ================================================================= */}
       <header
         className={`fixed top-0 inset-x-0 z-40 transition-all duration-500 ${
           scrolled
-            ? 'bg-[#F9F8F6]/85 backdrop-blur-md border-b border-[#E5E0D8] py-3.5'
-            : 'bg-transparent py-5 text-white'
+            ? 'bg-[#F9F8F6]/90 backdrop-blur-md border-b border-[#E5E0D8] py-3'
+            : 'bg-gradient-to-b from-black/60 via-black/25 to-transparent py-4 sm:py-5 text-white'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between gap-4">
-          {/* Left Nav */}
-          <div className="flex items-center gap-6">
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              aria-label="Open menu"
-              className="lg:hidden p-1.5 hover:opacity-70 transition-opacity"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-            <nav className="hidden lg:flex items-center gap-7 text-xs tracking-[0.18em] uppercase font-medium">
-              <a href="#collection" className="hover:opacity-60 transition-opacity">
-                Collection
-              </a>
-              <a href="#lookbook" className="hover:opacity-60 transition-opacity">
-                Lookbook
-              </a>
-              <a href="#atelier" className="hover:opacity-60 transition-opacity">
-                Atelier
-              </a>
-            </nav>
-          </div>
-
-          {/* Brand Wordmark */}
-          <a
-            href="#"
-            className="font-editorial text-2xl sm:text-3xl tracking-[0.22em] font-light uppercase"
-          >
-            ShreeJi Apparels
-          </a>
-
-          {/* Right Utilities */}
-          <div className="flex items-center gap-3 sm:gap-5">
-            {/* Expandable Live Search */}
-            <div className="flex items-center">
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  searchOpen ? 'w-36 sm:w-52 opacity-100 mr-2' : 'w-0 opacity-0'
-                }`}
-              >
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    if (window.scrollY < 400) {
-                      document
-                        .getElementById('collection')
-                        ?.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                  placeholder="Search pieces..."
-                  className={`w-full text-xs bg-transparent border-b pb-1 focus:outline-none ${
-                    scrolled
-                      ? 'border-[#141414]/40 placeholder:text-[#6E6A63]'
-                      : 'border-white/50 placeholder:text-white/70 text-white'
-                  }`}
-                />
-              </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+          <div className="flex items-center justify-between gap-2 sm:gap-4">
+            {/* Left Nav */}
+            <div className="flex items-center gap-3 sm:gap-6">
               <button
-                onClick={() => {
-                  setSearchOpen((v) => !v);
-                  if (searchOpen) setSearchQuery('');
-                }}
-                aria-label="Search"
-                className="p-1.5 hover:opacity-65 transition-opacity"
+                onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open menu"
+                className="p-1.5 hover:opacity-70 active:scale-95 transition-all"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+              <nav className="hidden lg:flex items-center gap-7 text-xs tracking-[0.18em] uppercase font-medium">
+                <a href="#collection" className="hover:opacity-60 transition-opacity">
+                  Collection
+                </a>
+                <a href="#lookbook" className="hover:opacity-60 transition-opacity">
+                  Lookbook
+                </a>
+                <a href="#atelier" className="hover:opacity-60 transition-opacity">
+                  Atelier
+                </a>
+              </nav>
+            </div>
+
+            {/* Brand Wordmark */}
+            <a
+              href="#"
+              className="font-editorial text-lg sm:text-2xl md:text-3xl tracking-[0.15em] sm:tracking-[0.22em] font-light uppercase text-center truncate max-w-[210px] sm:max-w-none"
+            >
+              ShreeJi Apparels
+            </a>
+
+            {/* Right Utilities */}
+            <div className="flex items-center gap-1.5 sm:gap-5">
+              {/* Expandable Live Search on Desktop */}
+              <div className="hidden sm:flex items-center">
+                <div
+                  className={`overflow-hidden transition-all duration-300 ${
+                    searchOpen ? 'w-36 sm:w-52 opacity-100 mr-2' : 'w-0 opacity-0'
+                  }`}
+                >
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      if (window.scrollY < 400) {
+                        document
+                          .getElementById('collection')
+                          ?.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    placeholder="Search pieces..."
+                    className={`w-full text-xs bg-transparent border-b pb-1 focus:outline-none ${
+                      scrolled
+                        ? 'border-[#141414]/40 placeholder:text-[#6E6A63]'
+                        : 'border-white/50 placeholder:text-white/70 text-white'
+                    }`}
+                  />
+                </div>
+                <button
+                  onClick={() => {
+                    setSearchOpen((v) => !v);
+                    if (searchOpen) setSearchQuery('');
+                  }}
+                  aria-label="Search"
+                  className="p-1.5 hover:opacity-65 active:scale-95 transition-all"
+                >
+                  {searchOpen ? (
+                    <X className="w-4 h-4" />
+                  ) : (
+                    <Search className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
+
+              {/* Mobile Search Toggle Button */}
+              <button
+                onClick={() => setSearchOpen((v) => !v)}
+                aria-label="Toggle mobile search"
+                className="sm:hidden p-1.5 hover:opacity-65 active:scale-95 transition-all"
               >
                 {searchOpen ? (
                   <X className="w-4 h-4" />
@@ -562,43 +587,98 @@ export default function App() {
                   <Search className="w-4 h-4" />
                 )}
               </button>
-            </div>
 
-            {/* Wishlist Indicator */}
-            <a
-              href="#collection"
-              aria-label="Saved items"
-              className="relative p-1.5 hover:opacity-65 transition-opacity hidden sm:inline-flex"
-            >
-              <Heart className="w-4 h-4" />
-              {wishlist.length > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#141414] text-[#F9F8F6] text-[10px] flex items-center justify-center">
-                  {wishlist.length}
-                </span>
-              )}
-            </a>
-
-            {/* Bag Button */}
-            <button
-              onClick={() => setCartOpen(true)}
-              aria-label="Shopping bag"
-              className={`relative flex items-center gap-1.5 text-xs tracking-[0.14em] uppercase p-1.5 hover:opacity-70 transition-transform ${
-                bagPulse ? 'scale-110' : 'scale-100'
-              }`}
-            >
-              <ShoppingBag className="w-4 h-4" />
-              <span className="hidden sm:inline">Bag</span>
-              <span
-                className={`w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-medium transition-colors ${
-                  scrolled
-                    ? 'bg-[#141414] text-[#F9F8F6]'
-                    : 'bg-white text-[#141414]'
+              {/* Wishlist Indicator */}
+              <button
+                onClick={() => {
+                  setFilterWishlistOnly((prev) => !prev);
+                  document
+                    .getElementById('collection')
+                    ?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                aria-label="Saved items"
+                className={`relative p-1.5 hover:opacity-65 active:scale-95 transition-all ${
+                  filterWishlistOnly ? 'scale-105' : ''
                 }`}
               >
-                {cartCount}
-              </span>
-            </button>
+                <Heart
+                  className={`w-4 h-4 ${
+                    filterWishlistOnly ? 'fill-current' : ''
+                  }`}
+                />
+                {wishlist.length > 0 && (
+                  <span
+                    className={`absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full text-[9px] flex items-center justify-center font-bold ${
+                      scrolled
+                        ? 'bg-[#141414] text-[#F9F8F6]'
+                        : 'bg-white text-[#141414]'
+                    }`}
+                  >
+                    {wishlist.length}
+                  </span>
+                )}
+              </button>
+
+              {/* Bag Button */}
+              <button
+                onClick={() => setCartOpen(true)}
+                aria-label="Shopping bag"
+                className={`relative flex items-center gap-1.5 text-xs tracking-[0.14em] uppercase p-1.5 hover:opacity-70 active:scale-95 transition-all ${
+                  bagPulse ? 'scale-110' : 'scale-100'
+                }`}
+              >
+                <ShoppingBag className="w-4 h-4" />
+                <span className="hidden sm:inline">Bag</span>
+                <span
+                  className={`w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-medium transition-colors ${
+                    scrolled
+                      ? 'bg-[#141414] text-[#F9F8F6]'
+                      : 'bg-white text-[#141414]'
+                  }`}
+                >
+                  {cartCount}
+                </span>
+              </button>
+            </div>
           </div>
+
+          {/* Mobile Search Dropdown Bar */}
+          {searchOpen && (
+            <div className="sm:hidden mt-2.5 pt-2.5 border-t border-current/15 animate-modal-in">
+              <div
+                className={`flex items-center rounded-full px-3.5 py-1.5 ${
+                  scrolled
+                    ? 'bg-[#141414]/5 text-[#141414]'
+                    : 'bg-white/15 text-white backdrop-blur-sm'
+                }`}
+              >
+                <Search className="w-3.5 h-3.5 opacity-60 mr-2 shrink-0" />
+                <input
+                  type="text"
+                  autoFocus
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    if (window.scrollY < 300) {
+                      document
+                        .getElementById('collection')
+                        ?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  placeholder="Search coat, merino, cashmere..."
+                  className="w-full text-xs bg-transparent focus:outline-none placeholder:opacity-50"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="p-1 opacity-60 hover:opacity-100"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
@@ -612,48 +692,118 @@ export default function App() {
       >
         <div
           onClick={() => setMobileMenuOpen(false)}
-          className="absolute inset-0 bg-black/45 backdrop-blur-xs"
+          className="absolute inset-0 bg-black/55 backdrop-blur-xs transition-opacity"
         />
         <div
-          className={`absolute top-0 left-0 bottom-0 w-72 bg-[#F9F8F6] p-7 flex flex-col justify-between transition-transform duration-300 ${
+          className={`absolute top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-[#F9F8F6] p-6 sm:p-7 flex flex-col justify-between transition-transform duration-300 ease-out shadow-2xl ${
             mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
           <div>
-            <div className="flex items-center justify-between pb-6 border-b border-[#E5E0D8]">
+            <div className="flex items-center justify-between pb-5 border-b border-[#E5E0D8]">
               <span className="font-editorial text-xl tracking-[0.2em]">
                 ShreeJi Apparels
               </span>
               <button
                 onClick={() => setMobileMenuOpen(false)}
                 aria-label="Close menu"
+                className="p-1.5 hover:opacity-70 active:scale-95"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <nav className="mt-8 flex flex-col gap-5 text-sm tracking-[0.16em] uppercase">
-              {['Collection', 'Lookbook', 'Atelier'].map((label) => (
+
+            {/* Quick Actions in Drawer */}
+            <div className="mt-5 grid grid-cols-2 gap-2 text-xs">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setFilterWishlistOnly(true);
+                  document
+                    .getElementById('collection')
+                    ?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="flex items-center justify-center gap-2 py-2.5 px-3 bg-[#E5E0D8]/45 border border-[#E5E0D8] rounded-xs hover:bg-[#E5E0D8] active:scale-95 transition-all"
+              >
+                <Heart className="w-3.5 h-3.5 text-[#141414]" />
+                <span className="font-medium">Saved ({wishlist.length})</span>
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setCartOpen(true);
+                }}
+                className="flex items-center justify-center gap-2 py-2.5 px-3 bg-[#141414] text-[#F9F8F6] rounded-xs active:scale-95 transition-all"
+              >
+                <ShoppingBag className="w-3.5 h-3.5" />
+                <span className="font-medium">Bag ({cartCount})</span>
+              </button>
+            </div>
+
+            {/* Main Navigation Links */}
+            <nav className="mt-7 flex flex-col gap-4 text-xs tracking-[0.2em] uppercase font-medium">
+              <p className="text-[10px] tracking-[0.24em] text-[#6E6A63] uppercase mb-0.5">
+                Explore House
+              </p>
+              {[
+                { label: 'Collection', href: '#collection' },
+                { label: 'Lookbook Study', href: '#lookbook' },
+                { label: 'Atelier & Craft', href: '#atelier' },
+              ].map((item) => (
                 <a
-                  key={label}
-                  href={`#${label.toLowerCase()}`}
+                  key={item.label}
+                  href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="py-1 border-b border-transparent hover:border-[#141414] w-fit transition-colors"
+                  className="py-1 text-[#141414] border-b border-transparent hover:border-[#141414] w-fit active:translate-x-1 transition-all"
                 >
-                  {label}
+                  {item.label}
                 </a>
               ))}
             </nav>
+
+            {/* Wardrobe Categories Quick Filter */}
+            <div className="mt-7 pt-5 border-t border-[#E5E0D8]">
+              <p className="text-[10px] tracking-[0.24em] text-[#6E6A63] uppercase mb-3">
+                Curated Categories
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {CATEGORIES.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setActiveCategory(cat);
+                      setFilterWishlistOnly(false);
+                      setMobileMenuOpen(false);
+                      document
+                        .getElementById('collection')
+                        ?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className={`px-3 py-1.5 text-[10px] sm:text-[11px] tracking-wider uppercase border active:scale-95 transition-all ${
+                      activeCategory === cat && !filterWishlistOnly
+                        ? 'bg-[#141414] text-[#F9F8F6] border-[#141414]'
+                        : 'border-[#E5E0D8] bg-transparent text-[#6E6A63]'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-          <p className="text-xs text-[#6E6A63] tracking-wide">
-            Paris · Milan · Tokyo
-          </p>
+
+          <div className="pt-6 border-t border-[#E5E0D8] space-y-2 text-xs text-[#6E6A63]">
+            <p className="tracking-wide">Paris · Milan · Tokyo</p>
+            <p className="text-[11px] text-[#6E6A63]/80">
+              Complimentary express shipping on orders over $500
+            </p>
+          </div>
         </div>
       </div>
 
       {/* ================================================================= */}
       {/* FULL-VIEWPORT EDITORIAL HERO                                      */}
       {/* ================================================================= */}
-      <section className="relative h-screen min-h-[680px] flex items-end overflow-hidden bg-[#141414]">
+      <section className="relative h-[100dvh] min-h-[580px] sm:min-h-[680px] flex items-end overflow-hidden bg-[#141414]">
         <div
           className="absolute inset-0 bg-cover bg-center will-change-transform transition-transform duration-100"
           style={{
@@ -661,38 +811,48 @@ export default function App() {
             transform: `scale(${heroScale})`,
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#141414]/80 via-[#141414]/30 to-[#141414]/35" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#141414]/90 via-[#141414]/40 to-[#141414]/35" />
 
-        <div className="relative z-10 max-w-7xl w-full mx-auto px-5 sm:px-8 pb-16 sm:pb-24 text-[#F9F8F6]">
-          <p className="animate-hero-1 text-xs tracking-[0.28em] uppercase text-[#E5E0D8] mb-4">
+        <div className="relative z-10 max-w-7xl w-full mx-auto px-5 sm:px-8 pb-14 sm:pb-24 text-[#F9F8F6]">
+          <p className="animate-hero-1 text-[11px] sm:text-xs tracking-[0.24em] sm:tracking-[0.28em] uppercase text-[#E5E0D8] mb-3 sm:mb-4">
             Autumn / Winter Atelier Collection
           </p>
-          <h1 className="animate-hero-2 font-editorial text-5xl sm:text-7xl lg:text-8xl font-light leading-[0.98] max-w-3xl">
+          <h1 className="animate-hero-2 font-editorial text-4xl xs:text-5xl sm:text-7xl lg:text-8xl font-light leading-[1.05] sm:leading-[0.98] max-w-3xl">
             Quiet Form, <br />
             <span className="italic font-light text-[#E5E0D8]">
               Enduring Tailoring.
             </span>
           </h1>
-          <p className="animate-hero-3 mt-6 text-sm sm:text-base text-[#E5E0D8]/90 max-w-md font-light leading-relaxed">
+          <p className="animate-hero-3 mt-4 sm:mt-6 text-xs sm:text-sm md:text-base text-[#E5E0D8]/90 max-w-md font-light leading-relaxed">
             Architectural silhouettes crafted in small batches from traceable
             Australian merino, Grade-A cashmere, and Italian virgin wool.
           </p>
-          <div className="animate-hero-4 mt-9 flex flex-wrap items-center gap-4">
+          <div className="animate-hero-4 mt-7 sm:mt-9 flex flex-row items-center gap-3 sm:gap-4 flex-wrap sm:flex-nowrap">
             <a
               href="#collection"
-              className="group inline-flex items-center gap-3 bg-[#F9F8F6] text-[#141414] px-7 py-3.5 text-xs tracking-[0.2em] uppercase font-medium hover:bg-[#E5E0D8] transition-colors"
+              className="group inline-flex items-center justify-center gap-3 bg-white text-[#141414] px-5 sm:px-7 py-3 sm:py-3.5 text-[11px] sm:text-xs tracking-[0.18em] sm:tracking-[0.2em] uppercase font-medium hover:bg-[#E5E0D8] active:scale-[0.98] transition-all whitespace-nowrap"
             >
               Explore Collection
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" strokeWidth={1.75} />
             </a>
             <a
               href="#lookbook"
-              className="inline-flex items-center gap-2 border border-[#F9F8F6]/50 text-[#F9F8F6] px-7 py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-[#F9F8F6]/10 transition-colors"
+              className="inline-flex items-center justify-center border border-white/40 bg-white/5 backdrop-blur-xs text-[#F9F8F6] px-5 sm:px-7 py-3 sm:py-3.5 text-[11px] sm:text-xs tracking-[0.18em] sm:tracking-[0.2em] uppercase font-medium hover:bg-white/15 hover:border-white active:scale-[0.98] transition-all whitespace-nowrap"
             >
               View Lookbook
             </a>
           </div>
         </div>
+
+        {/* Scroll indicator for mobile & desktop */}
+        <a
+          href="#collection"
+          aria-label="Scroll to collection"
+          className="animate-bounce-down absolute bottom-5 right-5 sm:bottom-8 sm:right-8 z-10 hidden xs:flex flex-col items-center gap-1 text-[#E5E0D8]/60 hover:text-[#F9F8F6] transition-colors"
+        >
+          <span className="text-[9px] tracking-[0.2em] uppercase">Scroll</span>
+          <ChevronDown className="w-4 h-4" />
+        </a>
       </section>
 
       {/* ================================================================= */}
@@ -723,21 +883,54 @@ export default function App() {
       {/* ================================================================= */}
       <section
         id="collection"
-        className="max-w-7xl mx-auto px-5 sm:px-8 py-20 sm:py-28"
+        className="max-w-7xl mx-auto px-4 sm:px-8 py-16 sm:py-28"
       >
         <Reveal>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
-            <div>
-              <p className="text-xs tracking-[0.24em] uppercase text-[#6E6A63] mb-2">
-                Curated Wardrobe
-              </p>
-              <h2 className="font-editorial text-4xl sm:text-5xl font-light">
-                The Collection
-              </h2>
+          <div className="flex flex-col gap-6 mb-8 sm:mb-12">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div>
+                <p className="text-xs tracking-[0.24em] uppercase text-[#6E6A63] mb-2">
+                  Curated Wardrobe
+                </p>
+                <h2 className="font-editorial text-3xl sm:text-5xl font-light">
+                  The Collection
+                </h2>
+              </div>
+
+              {/* Mobile View Controls */}
+              <div className="flex items-center justify-between sm:justify-end gap-3 pt-1 sm:pt-0">
+                <span className="text-xs tracking-[0.14em] uppercase text-[#6E6A63]">
+                  {filteredProducts.length} Pieces
+                </span>
+                <div className="flex items-center border border-[#E5E0D8] rounded p-0.5 sm:hidden">
+                  <button
+                    onClick={() => setMobileGridCols(1)}
+                    aria-label="Single column view"
+                    className={`p-1.5 rounded transition-colors ${
+                      mobileGridCols === 1
+                        ? 'bg-[#141414] text-[#F9F8F6]'
+                        : 'text-[#6E6A63]'
+                    }`}
+                  >
+                    <Grid className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => setMobileGridCols(2)}
+                    aria-label="Two column view"
+                    className={`p-1.5 rounded transition-colors ${
+                      mobileGridCols === 2
+                        ? 'bg-[#141414] text-[#F9F8F6]'
+                        : 'text-[#6E6A63]'
+                    }`}
+                  >
+                    <LayoutGrid className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
             </div>
 
-            {/* Sliding Indicator Category Filter */}
-            <div className="relative inline-flex items-center bg-[#E5E0D8]/60 p-1 rounded-full overflow-x-auto max-w-full">
+            {/* Sliding Indicator Category Filter (Horizontal Scroll with no-scrollbar) */}
+            <div className="relative inline-flex items-center bg-[#E5E0D8]/60 p-1 rounded-full overflow-x-auto no-scrollbar max-w-full">
               <span
                 className="absolute top-1 bottom-1 bg-[#141414] rounded-full transition-all duration-300 ease-out"
                 style={{
@@ -746,13 +939,16 @@ export default function App() {
                 }}
               />
               {CATEGORIES.map((cat) => {
-                const active = activeCategory === cat;
+                const active = activeCategory === cat && !filterWishlistOnly;
                 return (
                   <button
                     key={cat}
                     ref={(el) => (tabRefs.current[cat] = el)}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`relative z-10 px-4 sm:px-5 py-2 text-xs tracking-[0.14em] uppercase whitespace-nowrap transition-colors duration-300 ${
+                    onClick={() => {
+                      setActiveCategory(cat);
+                      setFilterWishlistOnly(false);
+                    }}
+                    className={`relative z-10 px-3.5 sm:px-5 py-2 text-xs tracking-[0.14em] uppercase whitespace-nowrap transition-colors duration-300 ${
                       active
                         ? 'text-[#F9F8F6]'
                         : 'text-[#141414]/75 hover:text-[#141414]'
@@ -763,19 +959,38 @@ export default function App() {
                 );
               })}
             </div>
+
+            {/* Active Wishlist Filter Notice */}
+            {filterWishlistOnly && (
+              <div className="flex items-center justify-between bg-[#141414] text-[#F9F8F6] px-4 py-2.5 text-xs rounded-xs animate-modal-in">
+                <span className="flex items-center gap-2">
+                  <Heart className="w-3.5 h-3.5 fill-current text-[#E5E0D8]" />
+                  Viewing Saved Pieces ({filteredProducts.length})
+                </span>
+                <button
+                  onClick={() => setFilterWishlistOnly(false)}
+                  className="text-[11px] tracking-wider uppercase underline underline-offset-2 hover:opacity-75"
+                >
+                  View All Pieces
+                </button>
+              </div>
+            )}
           </div>
         </Reveal>
 
         {filteredProducts.length === 0 ? (
-          <div className="text-center py-20 border border-[#E5E0D8]">
+          <div className="text-center py-16 sm:py-20 border border-[#E5E0D8] px-4">
             <p className="font-editorial text-2xl mb-2">No pieces found</p>
-            <p className="text-sm text-[#6E6A63] mb-5">
-              Try clearing your search or selecting another category.
+            <p className="text-xs sm:text-sm text-[#6E6A63] mb-5">
+              {filterWishlistOnly
+                ? 'You have not added any pieces to your wishlist yet.'
+                : 'Try clearing your search or selecting another category.'}
             </p>
             <button
               onClick={() => {
                 setSearchQuery('');
                 setActiveCategory('All');
+                setFilterWishlistOnly(false);
               }}
               className="text-xs tracking-[0.18em] uppercase underline underline-offset-4"
             >
@@ -783,16 +998,20 @@ export default function App() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+          <div
+            className={`grid ${
+              mobileGridCols === 1 ? 'grid-cols-1' : 'grid-cols-2'
+            } sm:grid-cols-2 lg:grid-cols-4 gap-x-3.5 sm:gap-x-6 gap-y-7 sm:gap-y-12`}
+          >
             {filteredProducts.map((product, index) => {
               const isWished = wishlist.includes(product.id);
               return (
-                <Reveal key={product.id} delay={(index % 4) * 70}>
-                  <article className="group flex flex-col">
-                    {/* Image Card with Crossfade Swap & Quick-Add Size Bar */}
+                <Reveal key={product.id} delay={(index % 4) * 60}>
+                  <article className="group flex flex-col h-full">
+                    {/* Image Card with Crossfade Swap & Mobile Touch-friendly Controls */}
                     <div
                       onClick={() => openQuickView(product)}
-                      className="relative aspect-[3/4] overflow-hidden bg-[#E5E0D8]/50 cursor-pointer"
+                      className="relative aspect-[3/4] overflow-hidden bg-[#E5E0D8]/50 cursor-pointer rounded-xs"
                     >
                       <img
                         src={product.image}
@@ -809,17 +1028,17 @@ export default function App() {
 
                       {/* Badge */}
                       {product.badge && (
-                        <span className="absolute top-3 left-3 bg-[#F9F8F6]/90 backdrop-blur-xs text-[#141414] px-2.5 py-1 text-[10px] tracking-[0.18em] uppercase">
+                        <span className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-[#F9F8F6]/90 backdrop-blur-xs text-[#141414] px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] tracking-[0.16em] uppercase">
                           {product.badge}
                         </span>
                       )}
 
                       {/* Top-right actions */}
-                      <div className="absolute top-3 right-3 flex flex-col gap-2">
+                      <div className="absolute top-2 right-2 sm:top-3 sm:right-3 flex flex-col gap-1.5 sm:gap-2 z-10">
                         <button
                           onClick={(e) => toggleWishlist(product.id, e)}
                           aria-label="Toggle wishlist"
-                          className={`w-8 h-8 rounded-full bg-[#F9F8F6]/90 backdrop-blur-xs flex items-center justify-center hover:bg-[#141414] hover:text-[#F9F8F6] transition-colors ${
+                          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#F9F8F6]/95 backdrop-blur-xs flex items-center justify-center hover:bg-[#141414] hover:text-[#F9F8F6] active:scale-90 transition-all shadow-sm ${
                             heartPulseId === product.id
                               ? 'animate-heart-pop'
                               : ''
@@ -837,28 +1056,32 @@ export default function App() {
                             openQuickView(product);
                           }}
                           aria-label="Quick view"
-                          className="w-8 h-8 rounded-full bg-[#F9F8F6]/90 backdrop-blur-xs flex items-center justify-center opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-[#141414] hover:text-[#F9F8F6]"
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#F9F8F6]/95 backdrop-blur-xs flex items-center justify-center sm:opacity-0 sm:translate-y-1 sm:group-hover:opacity-100 sm:group-hover:translate-y-0 transition-all duration-300 hover:bg-[#141414] hover:text-[#F9F8F6] active:scale-90 shadow-sm"
                         >
                           <Eye className="w-3.5 h-3.5" />
                         </button>
                       </div>
 
-                      {/* Quick-Add Size Bar on Hover */}
+                      {/* Quick-Add Size Bar on Hover (Desktop) or 1-Col Mobile */}
                       <div
                         onClick={(e) => e.stopPropagation()}
-                        className="absolute inset-x-3 bottom-3 bg-[#F9F8F6]/95 backdrop-blur-md px-3 py-2.5 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300"
+                        className={`absolute inset-x-2 sm:inset-x-3 bottom-2 sm:bottom-3 bg-[#F9F8F6]/95 backdrop-blur-md px-2 sm:px-3 py-2 sm:py-2.5 transition-all duration-300 ${
+                          mobileGridCols === 1
+                            ? 'translate-y-0 opacity-100'
+                            : 'translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100'
+                        }`}
                       >
-                        <p className="text-[10px] tracking-[0.18em] uppercase text-[#6E6A63] mb-1.5 text-center">
+                        <p className="text-[9px] sm:text-[10px] tracking-[0.16em] uppercase text-[#6E6A63] mb-1 sm:mb-1.5 text-center">
                           Quick Add
                         </p>
-                        <div className="flex items-center justify-center gap-1.5">
+                        <div className="flex items-center justify-center gap-1 sm:gap-1.5 flex-wrap">
                           {product.sizes.map((sz) => (
                             <button
                               key={sz}
                               onClick={() =>
                                 addToCart(product, sz, product.colors[0].name)
                               }
-                              className="min-w-[30px] h-7 px-2 text-[11px] border border-[#E5E0D8] hover:border-[#141414] hover:bg-[#141414] hover:text-[#F9F8F6] transition-colors"
+                              className="min-w-[26px] sm:min-w-[30px] h-6 sm:h-7 px-1.5 sm:px-2 text-[10px] sm:text-[11px] border border-[#E5E0D8] hover:border-[#141414] hover:bg-[#141414] hover:text-[#F9F8F6] active:scale-95 transition-all"
                             >
                               {sz}
                             </button>
@@ -868,33 +1091,45 @@ export default function App() {
                     </div>
 
                     {/* Product Info */}
-                    <div className="pt-4 flex flex-col gap-1">
-                      <div className="flex items-start justify-between gap-2">
-                        <h3
-                          onClick={() => openQuickView(product)}
-                          className="font-editorial text-lg leading-snug cursor-pointer hover:opacity-70 transition-opacity"
-                        >
-                          {product.name}
-                        </h3>
-                        <span className="text-sm font-medium whitespace-nowrap">
-                          ${product.price}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between mt-1">
-                        <span className="text-[11px] tracking-[0.14em] uppercase text-[#6E6A63]">
-                          {product.category}
-                        </span>
-                        <div className="flex items-center gap-1.5">
-                          {product.colors.map((c) => (
-                            <span
-                              key={c.name}
-                              title={c.name}
-                              className="w-3 h-3 rounded-full border border-black/15"
-                              style={{ backgroundColor: c.hex }}
-                            />
-                          ))}
+                    <div className="pt-3 sm:pt-4 flex flex-col gap-1 flex-1 justify-between">
+                      <div>
+                        <div className="flex items-start justify-between gap-1.5">
+                          <h3
+                            onClick={() => openQuickView(product)}
+                            className="font-editorial text-sm sm:text-lg leading-snug cursor-pointer hover:opacity-70 transition-opacity line-clamp-1 sm:line-clamp-none"
+                          >
+                            {product.name}
+                          </h3>
+                          <span className="text-xs sm:text-sm font-medium whitespace-nowrap">
+                            ${product.price}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between mt-1">
+                          <span className="text-[10px] sm:text-[11px] tracking-[0.14em] uppercase text-[#6E6A63]">
+                            {product.category}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            {product.colors.map((c) => (
+                              <span
+                                key={c.name}
+                                title={c.name}
+                                className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border border-black/15"
+                                style={{ backgroundColor: c.hex }}
+                              />
+                            ))}
+                          </div>
                         </div>
                       </div>
+
+                      {/* Mobile 2-column Quick Add Button */}
+                      {mobileGridCols === 2 && (
+                        <button
+                          onClick={() => openQuickView(product)}
+                          className="sm:hidden mt-2.5 w-full py-1.5 text-[10px] tracking-[0.14em] uppercase border border-[#E5E0D8] text-[#141414] hover:border-[#141414] active:bg-[#141414] active:text-[#F9F8F6] transition-colors"
+                        >
+                          Select Size +
+                        </button>
+                      )}
                     </div>
                   </article>
                 </Reveal>
@@ -909,20 +1144,20 @@ export default function App() {
       {/* ================================================================= */}
       <section
         id="lookbook"
-        className="bg-[#E5E0D8]/45 border-y border-[#E5E0D8] py-20 sm:py-28"
+        className="bg-[#E5E0D8]/45 border-y border-[#E5E0D8] py-16 sm:py-28"
       >
-        <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <Reveal>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-10 sm:mb-14">
               <div>
                 <p className="text-xs tracking-[0.24em] uppercase text-[#6E6A63] mb-2">
                   Editorial Study 04
                 </p>
-                <h2 className="font-editorial text-4xl sm:text-5xl font-light">
+                <h2 className="font-editorial text-3xl sm:text-5xl font-light">
                   Interactive Lookbook
                 </h2>
               </div>
-              <p className="text-sm text-[#6E6A63] max-w-md">
+              <p className="text-xs sm:text-sm text-[#6E6A63] max-w-md">
                 Select any pulsing atelier marker to inspect styling notes and
                 shop the garment directly.
               </p>
@@ -932,7 +1167,7 @@ export default function App() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Asymmetric Frame 1 */}
             <Reveal className="lg:col-span-7">
-              <div className="relative aspect-[4/5] overflow-hidden bg-[#141414]">
+              <div className="relative aspect-[4/5] overflow-hidden bg-[#141414] rounded-xs">
                 <img
                   src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=85"
                   alt="Editorial Look 01"
@@ -950,30 +1185,47 @@ export default function App() {
                       <button
                         onClick={() => setActiveHotspot(isOpen ? null : hs.id)}
                         aria-label={`Inspect ${prod.name}`}
-                        className="relative w-7 h-7 flex items-center justify-center"
+                        className="relative w-8 h-8 sm:w-7 sm:h-7 flex items-center justify-center active:scale-90 transition-transform"
                       >
                         <span className="hotspot-ring absolute inset-0 rounded-full bg-[#F9F8F6]" />
-                        <span className="relative w-3.5 h-3.5 rounded-full bg-[#F9F8F6] border-2 border-[#141414] shadow-md" />
+                        <span className="relative w-4 h-4 sm:w-3.5 sm:h-3.5 rounded-full bg-[#F9F8F6] border-2 border-[#141414] shadow-md" />
                       </button>
 
                       {isOpen && (
-                        <div className="animate-modal-in absolute left-1/2 -translate-x-1/2 mt-3 w-64 bg-[#F9F8F6]/95 backdrop-blur-md p-4 shadow-xl border border-[#E5E0D8]">
-                          <p className="text-[10px] tracking-[0.2em] uppercase text-[#6E6A63]">
-                            {prod.category}
-                          </p>
-                          <h4 className="font-editorial text-lg leading-snug mt-0.5">
-                            {prod.name}
-                          </h4>
+                        <div className="animate-sheet-up sm:animate-modal-in fixed sm:absolute inset-x-4 bottom-4 sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:-translate-x-1/2 sm:mt-3 sm:w-64 z-40 bg-[#F9F8F6]/95 backdrop-blur-md p-4 shadow-2xl sm:shadow-xl border border-[#E5E0D8] rounded-xs">
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <p className="text-[10px] tracking-[0.2em] uppercase text-[#6E6A63]">
+                                {prod.category}
+                              </p>
+                              <h4 className="font-editorial text-base sm:text-lg leading-snug mt-0.5">
+                                {prod.name}
+                              </h4>
+                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveHotspot(null);
+                              }}
+                              aria-label="Close tooltip"
+                              className="p-1 text-[#6E6A63] hover:text-[#141414] -mt-1 -mr-1"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
                           <p className="text-xs text-[#6E6A63] mt-1.5 leading-relaxed">
                             {hs.note}
                           </p>
                           <div className="mt-3 pt-3 border-t border-[#E5E0D8] flex items-center justify-between">
-                            <span className="text-xs font-medium">
+                            <span className="text-xs font-semibold">
                               ${prod.price}
                             </span>
                             <button
-                              onClick={() => openQuickView(prod)}
-                              className="text-[11px] tracking-[0.16em] uppercase underline underline-offset-4 hover:opacity-65"
+                              onClick={() => {
+                                setActiveHotspot(null);
+                                openQuickView(prod);
+                              }}
+                              className="text-[11px] tracking-[0.16em] uppercase underline underline-offset-4 hover:opacity-65 active:opacity-40"
                             >
                               Quick View
                             </button>
@@ -991,7 +1243,7 @@ export default function App() {
 
             {/* Asymmetric Frame 2 */}
             <Reveal delay={140} className="lg:col-span-5 lg:mt-16">
-              <div className="relative aspect-[3/4] overflow-hidden bg-[#141414]">
+              <div className="relative aspect-[3/4] overflow-hidden bg-[#141414] rounded-xs">
                 <img
                   src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=85"
                   alt="Editorial Look 02"
@@ -1009,30 +1261,47 @@ export default function App() {
                       <button
                         onClick={() => setActiveHotspot(isOpen ? null : hs.id)}
                         aria-label={`Inspect ${prod.name}`}
-                        className="relative w-7 h-7 flex items-center justify-center"
+                        className="relative w-8 h-8 sm:w-7 sm:h-7 flex items-center justify-center active:scale-90 transition-transform"
                       >
                         <span className="hotspot-ring absolute inset-0 rounded-full bg-[#F9F8F6]" />
-                        <span className="relative w-3.5 h-3.5 rounded-full bg-[#F9F8F6] border-2 border-[#141414] shadow-md" />
+                        <span className="relative w-4 h-4 sm:w-3.5 sm:h-3.5 rounded-full bg-[#F9F8F6] border-2 border-[#141414] shadow-md" />
                       </button>
 
                       {isOpen && (
-                        <div className="animate-modal-in absolute left-1/2 -translate-x-1/2 mt-3 w-60 bg-[#F9F8F6]/95 backdrop-blur-md p-4 shadow-xl border border-[#E5E0D8]">
-                          <p className="text-[10px] tracking-[0.2em] uppercase text-[#6E6A63]">
-                            {prod.category}
-                          </p>
-                          <h4 className="font-editorial text-lg leading-snug mt-0.5">
-                            {prod.name}
-                          </h4>
+                        <div className="animate-sheet-up sm:animate-modal-in fixed sm:absolute inset-x-4 bottom-4 sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:-translate-x-1/2 sm:mt-3 sm:w-60 z-40 bg-[#F9F8F6]/95 backdrop-blur-md p-4 shadow-2xl sm:shadow-xl border border-[#E5E0D8] rounded-xs">
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <p className="text-[10px] tracking-[0.2em] uppercase text-[#6E6A63]">
+                                {prod.category}
+                              </p>
+                              <h4 className="font-editorial text-base sm:text-lg leading-snug mt-0.5">
+                                {prod.name}
+                              </h4>
+                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveHotspot(null);
+                              }}
+                              aria-label="Close tooltip"
+                              className="p-1 text-[#6E6A63] hover:text-[#141414] -mt-1 -mr-1"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
                           <p className="text-xs text-[#6E6A63] mt-1.5 leading-relaxed">
                             {hs.note}
                           </p>
                           <div className="mt-3 pt-3 border-t border-[#E5E0D8] flex items-center justify-between">
-                            <span className="text-xs font-medium">
+                            <span className="text-xs font-semibold">
                               ${prod.price}
                             </span>
                             <button
-                              onClick={() => openQuickView(prod)}
-                              className="text-[11px] tracking-[0.16em] uppercase underline underline-offset-4 hover:opacity-65"
+                              onClick={() => {
+                                setActiveHotspot(null);
+                                openQuickView(prod);
+                              }}
+                              className="text-[11px] tracking-[0.16em] uppercase underline underline-offset-4 hover:opacity-65 active:opacity-40"
                             >
                               Quick View
                             </button>
@@ -1184,24 +1453,29 @@ export default function App() {
       </footer>
 
       {/* ================================================================= */}
-      {/* QUICK VIEW MODAL                                                  */}
+      {/* QUICK VIEW MODAL / MOBILE BOTTOM SHEET                           */}
       {/* ================================================================= */}
       {quickViewProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6">
           <div
             onClick={() => setQuickViewProduct(null)}
-            className="absolute inset-0 bg-black/55 backdrop-blur-xs"
+            className="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
           />
-          <div className="animate-modal-in relative z-10 bg-[#F9F8F6] max-w-3xl w-full grid grid-cols-1 md:grid-cols-2 overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
+          <div className="animate-sheet-up sm:animate-modal-in relative z-10 bg-[#F9F8F6] max-w-3xl w-full rounded-t-2xl sm:rounded-none grid grid-cols-1 md:grid-cols-2 overflow-hidden shadow-2xl max-h-[88vh] sm:max-h-[90vh] overflow-y-auto">
+            {/* Mobile Drag Handle */}
+            <div className="md:hidden pt-3 pb-1 flex justify-center sticky top-0 bg-[#F9F8F6] z-30">
+              <div className="w-10 h-1 rounded-full bg-[#141414]/25" />
+            </div>
+
             <button
               onClick={() => setQuickViewProduct(null)}
               aria-label="Close modal"
-              className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-[#F9F8F6]/90 flex items-center justify-center hover:bg-[#141414] hover:text-[#F9F8F6] transition-colors"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 z-30 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#F9F8F6]/90 flex items-center justify-center hover:bg-[#141414] hover:text-[#F9F8F6] active:scale-90 transition-all shadow-sm"
             >
               <X className="w-4 h-4" />
             </button>
 
-            <div className="aspect-[3/4] md:aspect-auto bg-[#E5E0D8]">
+            <div className="aspect-[4/3] xs:aspect-[3/4] md:aspect-auto bg-[#E5E0D8] max-h-[340px] sm:max-h-none">
               <img
                 src={quickViewProduct.image}
                 alt={quickViewProduct.name}
@@ -1209,21 +1483,21 @@ export default function App() {
               />
             </div>
 
-            <div className="p-6 sm:p-8 flex flex-col justify-between">
+            <div className="p-5 sm:p-8 flex flex-col justify-between">
               <div>
                 <p className="text-[11px] tracking-[0.2em] uppercase text-[#6E6A63]">
                   {quickViewProduct.category}
                 </p>
-                <h3 className="font-editorial text-3xl font-light mt-1">
+                <h3 className="font-editorial text-2xl sm:text-3xl font-light mt-1">
                   {quickViewProduct.name}
                 </h3>
-                <p className="text-lg font-medium mt-2">
+                <p className="text-base sm:text-lg font-medium mt-1.5 sm:mt-2">
                   ${quickViewProduct.price}
                 </p>
-                <p className="text-sm text-[#6E6A63] mt-4 leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#6E6A63] mt-3 sm:mt-4 leading-relaxed">
                   {quickViewProduct.description}
                 </p>
-                <p className="text-xs text-[#141414]/80 mt-3 pt-3 border-t border-[#E5E0D8]">
+                <p className="text-[11px] sm:text-xs text-[#141414]/80 mt-3 pt-3 border-t border-[#E5E0D8]">
                   <span className="uppercase tracking-[0.14em] text-[#6E6A63]">
                     Fabric:{' '}
                   </span>
@@ -1231,9 +1505,9 @@ export default function App() {
                 </p>
 
                 {/* Color Swatches */}
-                <div className="mt-6">
+                <div className="mt-5 sm:mt-6">
                   <p className="text-[11px] tracking-[0.16em] uppercase text-[#6E6A63] mb-2">
-                    Color: <span className="text-[#141414]">{qvColor}</span>
+                    Color: <span className="text-[#141414] font-medium">{qvColor}</span>
                   </p>
                   <div className="flex items-center gap-2.5">
                     {quickViewProduct.colors.map((c) => (
@@ -1241,7 +1515,7 @@ export default function App() {
                         key={c.name}
                         onClick={() => setQvColor(c.name)}
                         title={c.name}
-                        className={`w-7 h-7 rounded-full p-0.5 border transition-all ${
+                        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full p-0.5 border transition-all active:scale-95 ${
                           qvColor === c.name
                             ? 'border-[#141414] scale-110'
                             : 'border-transparent hover:border-[#6E6A63]'
@@ -1257,7 +1531,7 @@ export default function App() {
                 </div>
 
                 {/* Size Selection */}
-                <div className="mt-6">
+                <div className="mt-5 sm:mt-6">
                   <p className="text-[11px] tracking-[0.16em] uppercase text-[#6E6A63] mb-2">
                     Size
                   </p>
@@ -1266,9 +1540,9 @@ export default function App() {
                       <button
                         key={sz}
                         onClick={() => setQvSize(sz)}
-                        className={`min-w-[44px] h-10 px-3 text-xs tracking-wider border transition-colors ${
+                        className={`min-w-[44px] h-10 px-3.5 text-xs tracking-wider border active:scale-95 transition-all ${
                           qvSize === sz
-                            ? 'bg-[#141414] text-[#F9F8F6] border-[#141414]'
+                            ? 'bg-[#141414] text-[#F9F8F6] border-[#141414] font-medium'
                             : 'border-[#E5E0D8] hover:border-[#141414]'
                         }`}
                       >
@@ -1279,16 +1553,18 @@ export default function App() {
                 </div>
               </div>
 
-              <button
-                onClick={() => {
-                  addToCart(quickViewProduct, qvSize, qvColor);
-                  setQuickViewProduct(null);
-                  setCartOpen(true);
-                }}
-                className="mt-8 w-full bg-[#141414] text-[#F9F8F6] py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-[#2c2c2c] transition-colors"
-              >
-                Add to Bag — ${quickViewProduct.price}
-              </button>
+              <div className="sticky bottom-0 bg-[#F9F8F6] pt-4 pb-safe border-t border-[#E5E0D8]/60 sm:border-0 sm:static mt-6">
+                <button
+                  onClick={() => {
+                    addToCart(quickViewProduct, qvSize, qvColor);
+                    setQuickViewProduct(null);
+                    setCartOpen(true);
+                  }}
+                  className="w-full bg-[#141414] text-[#F9F8F6] py-3.5 sm:py-4 text-xs tracking-[0.2em] uppercase hover:bg-[#2c2c2c] active:scale-[0.99] transition-all font-medium"
+                >
+                  Add to Bag — ${quickViewProduct.price}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1314,14 +1590,14 @@ export default function App() {
           }`}
         >
           {/* Drawer Header */}
-          <div className="px-6 py-5 border-b border-[#E5E0D8] flex items-center justify-between">
-            <h3 className="font-editorial text-2xl">
+          <div className="px-5 sm:px-6 py-4 sm:py-5 border-b border-[#E5E0D8] flex items-center justify-between">
+            <h3 className="font-editorial text-xl sm:text-2xl">
               Shopping Bag ({cartCount})
             </h3>
             <button
               onClick={() => setCartOpen(false)}
               aria-label="Close bag"
-              className="p-1.5 hover:opacity-65"
+              className="p-1.5 hover:opacity-65 active:scale-90 transition-transform"
             >
               <X className="w-5 h-5" />
             </button>
@@ -1329,7 +1605,7 @@ export default function App() {
 
           {/* Free Shipping Progress Bar */}
           {!checkoutDone && (
-            <div className="px-6 py-3.5 bg-[#E5E0D8]/40 border-b border-[#E5E0D8]">
+            <div className="px-5 sm:px-6 py-3.5 bg-[#E5E0D8]/40 border-b border-[#E5E0D8]">
               <p className="text-xs text-[#141414]/85 mb-2">
                 {cartSubtotal >= freeShippingThreshold ? (
                   <span className="flex items-center gap-1.5 font-medium">
@@ -1356,7 +1632,7 @@ export default function App() {
           )}
 
           {/* Drawer Content */}
-          <div className="flex-1 overflow-y-auto px-6 py-5">
+          <div className="flex-1 overflow-y-auto px-5 sm:px-6 py-4 sm:py-5">
             {checkoutDone ? (
               <div className="animate-modal-in h-full flex flex-col items-center justify-center text-center py-12">
                 <div className="w-14 h-14 rounded-full bg-[#141414] text-[#F9F8F6] flex items-center justify-center mb-5">
@@ -1374,7 +1650,7 @@ export default function App() {
                     setCheckoutDone(false);
                     setCartOpen(false);
                   }}
-                  className="mt-8 border border-[#141414] px-6 py-3 text-xs tracking-[0.18em] uppercase hover:bg-[#141414] hover:text-[#F9F8F6] transition-colors"
+                  className="mt-8 border border-[#141414] px-6 py-3 text-xs tracking-[0.18em] uppercase hover:bg-[#141414] hover:text-[#F9F8F6] active:scale-95 transition-all"
                 >
                   Continue Exploring
                 </button>
@@ -1392,23 +1668,23 @@ export default function App() {
                 {cart.map((item, idx) => (
                   <li
                     key={`${item.product.id}-${item.size}-${item.color}`}
-                    className="py-5 flex gap-4"
+                    className="py-4 sm:py-5 flex gap-3.5 sm:gap-4"
                   >
                     <img
                       src={item.product.image}
                       alt={item.product.name}
-                      className="w-20 h-26 object-cover bg-[#E5E0D8] shrink-0"
+                      className="w-18 sm:w-20 h-24 sm:h-26 object-cover bg-[#E5E0D8] shrink-0 rounded-xs"
                     />
                     <div className="flex-1 flex flex-col justify-between">
                       <div>
                         <div className="flex items-start justify-between gap-2">
-                          <h4 className="font-editorial text-lg leading-snug">
+                          <h4 className="font-editorial text-base sm:text-lg leading-snug">
                             {item.product.name}
                           </h4>
                           <button
                             onClick={() => removeCartItem(idx)}
                             aria-label="Remove item"
-                            className="text-[#6E6A63] hover:text-[#141414]"
+                            className="p-1 text-[#6E6A63] hover:text-[#141414] active:scale-90 transition-transform"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -1419,22 +1695,24 @@ export default function App() {
                       </div>
 
                       <div className="flex items-center justify-between mt-3">
-                        <div className="inline-flex items-center border border-[#E5E0D8]">
+                        <div className="inline-flex items-center border border-[#E5E0D8] rounded-xs">
                           <button
                             onClick={() => updateCartQty(idx, -1)}
-                            className="px-2 py-1 hover:bg-[#E5E0D8]/50"
+                            className="w-8 h-8 flex items-center justify-center hover:bg-[#E5E0D8]/50 active:bg-[#E5E0D8]"
+                            aria-label="Decrease quantity"
                           >
                             <Minus className="w-3 h-3" />
                           </button>
-                          <span className="px-3 text-xs">{item.quantity}</span>
+                          <span className="px-3 text-xs font-medium">{item.quantity}</span>
                           <button
                             onClick={() => updateCartQty(idx, 1)}
-                            className="px-2 py-1 hover:bg-[#E5E0D8]/50"
+                            className="w-8 h-8 flex items-center justify-center hover:bg-[#E5E0D8]/50 active:bg-[#E5E0D8]"
+                            aria-label="Increase quantity"
                           >
                             <Plus className="w-3 h-3" />
                           </button>
                         </div>
-                        <span className="text-sm font-medium">
+                        <span className="text-sm font-semibold">
                           ${item.product.price * item.quantity}
                         </span>
                       </div>
@@ -1447,12 +1725,12 @@ export default function App() {
 
           {/* Drawer Footer */}
           {!checkoutDone && cart.length > 0 && (
-            <div className="p-6 border-t border-[#E5E0D8] bg-[#F9F8F6]">
+            <div className="p-5 sm:p-6 border-t border-[#E5E0D8] bg-[#F9F8F6] pb-safe">
               <div className="flex items-center justify-between text-sm mb-1.5">
                 <span className="text-[#6E6A63]">Subtotal</span>
                 <span className="font-medium">${cartSubtotal}</span>
               </div>
-              <div className="flex items-center justify-between text-xs text-[#6E6A63] mb-5">
+              <div className="flex items-center justify-between text-xs text-[#6E6A63] mb-4 sm:mb-5">
                 <span>Shipping</span>
                 <span>
                   {cartSubtotal >= freeShippingThreshold
@@ -1462,9 +1740,9 @@ export default function App() {
               </div>
               <button
                 onClick={handleCheckout}
-                className="w-full bg-[#141414] text-[#F9F8F6] py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-[#2a2a2a] transition-colors"
+                className="w-full bg-[#141414] text-[#F9F8F6] py-3.5 sm:py-4 text-xs tracking-[0.2em] uppercase hover:bg-[#2a2a2a] active:scale-[0.99] transition-all font-medium"
               >
-                Proceed to Checkout
+                Proceed to Checkout — ${cartSubtotal + (cartSubtotal >= freeShippingThreshold ? 0 : 25)}
               </button>
             </div>
           )}
@@ -1472,10 +1750,62 @@ export default function App() {
       </div>
 
       {/* ================================================================= */}
+      {/* MOBILE FLOATING NAVIGATION DOCK                                   */}
+      {/* ================================================================= */}
+      <nav
+        aria-label="Mobile quick dock"
+        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 lg:hidden flex items-center gap-1 bg-[#141414]/90 backdrop-blur-md text-[#F9F8F6] px-3.5 py-2 rounded-full shadow-2xl border border-white/15 animate-dock select-none"
+      >
+        <a
+          href="#"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-white/10 active:scale-95 transition-all text-xs uppercase tracking-wider"
+        >
+          <Compass className="w-4 h-4" />
+          <span className="text-[11px] font-medium hidden xs:inline">Atelier</span>
+        </a>
+        <a
+          href="#collection"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-white/10 active:scale-95 transition-all text-xs uppercase tracking-wider"
+        >
+          <LayoutGrid className="w-4 h-4" />
+          <span className="text-[11px] font-medium hidden xs:inline">Shop</span>
+        </a>
+        <button
+          onClick={() => {
+            setFilterWishlistOnly((prev) => !prev);
+            document.getElementById('collection')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-white/10 active:scale-95 transition-all text-xs uppercase tracking-wider ${
+            filterWishlistOnly ? 'bg-white text-[#141414]' : ''
+          }`}
+          aria-label="Toggle wishlist filter"
+        >
+          <Heart className={`w-4 h-4 ${filterWishlistOnly ? 'fill-current' : ''}`} />
+          {wishlist.length > 0 && (
+            <span
+              className={`w-4 h-4 rounded-full text-[9px] flex items-center justify-center font-bold ${
+                filterWishlistOnly ? 'bg-[#141414] text-[#F9F8F6]' : 'bg-[#F9F8F6] text-[#141414]'
+              }`}
+            >
+              {wishlist.length}
+            </span>
+          )}
+        </button>
+        <button
+          onClick={() => setCartOpen(true)}
+          className="relative flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-[#141414] active:scale-95 transition-all text-xs uppercase tracking-wider font-semibold"
+          aria-label="Open cart"
+        >
+          <ShoppingBag className="w-4 h-4" />
+          <span className="text-[11px]">{cartCount}</span>
+        </button>
+      </nav>
+
+      {/* ================================================================= */}
       {/* FLOATING TOAST NOTIFICATION                                       */}
       {/* ================================================================= */}
       {toast && (
-        <div className="animate-modal-in fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#141414] text-[#F9F8F6] px-5 py-3 text-xs tracking-[0.12em] shadow-xl flex items-center gap-2.5">
+        <div className="animate-modal-in fixed bottom-20 lg:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#141414] text-[#F9F8F6] px-5 py-3 text-xs tracking-[0.12em] shadow-xl flex items-center gap-2.5 rounded-xs">
           <Check className="w-3.5 h-3.5 text-[#E5E0D8]" />
           <span>{toast}</span>
         </div>

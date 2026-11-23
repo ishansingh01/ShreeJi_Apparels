@@ -96,6 +96,38 @@
   animation: modalIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+/* Mobile bottom sheet slide up */
+@keyframes sheetUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-sheet-up {
+  animation: sheetUp 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Mobile bottom dock reveal */
+@keyframes dockReveal {
+  0% {
+    transform: translate(-50%, 100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+.animate-dock {
+  animation: dockReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Heart pop */
 @keyframes heartPop {
   0% { transform: scale(1); }
@@ -105,4 +137,32 @@
 
 .animate-heart-pop {
   animation: heartPop 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Bounce scroll indicator */
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+.animate-bounce-down {
+  animation: bounceDown 2s ease-in-out infinite;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Safe area padding for mobile home bar */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 1rem));
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
 }
