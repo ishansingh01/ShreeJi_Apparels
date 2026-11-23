@@ -17,6 +17,10 @@ import {
   LayoutGrid,
   Compass,
   ArrowUp,
+  MapPin,
+  Navigation,
+  ExternalLink,
+  Clock,
 } from 'lucide-react';
 
 // ---------------------------------------------------------------------------
@@ -520,6 +524,9 @@ export default function App() {
                 <a href="#atelier" className="hover:opacity-60 transition-opacity">
                   Atelier
                 </a>
+                <a href="#location" className="hover:opacity-60 transition-opacity">
+                  Store
+                </a>
               </nav>
             </div>
 
@@ -749,6 +756,7 @@ export default function App() {
                 { label: 'Collection', href: '#collection' },
                 { label: 'Lookbook Study', href: '#lookbook' },
                 { label: 'Atelier & Craft', href: '#atelier' },
+                { label: 'Store Location', href: '#location' },
               ].map((item) => (
                 <a
                   key={item.label}
@@ -792,9 +800,17 @@ export default function App() {
           </div>
 
           <div className="pt-6 border-t border-[#E5E0D8] space-y-2 text-xs text-[#6E6A63]">
-            <p className="tracking-wide">Paris · Milan · Tokyo</p>
+            <a
+              href="https://maps.app.goo.gl/sPNFa2axQUCDRqHN7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-[#141414] font-medium tracking-wide hover:underline"
+            >
+              <MapPin className="w-3.5 h-3.5" />
+              <span>Gonda Flagship · View on Google Maps →</span>
+            </a>
             <p className="text-[11px] text-[#6E6A63]/80">
-              Complimentary express shipping on orders over $500
+              Gaytree Puram Colony, Jhanjhari Block, Gonda, UP 271001
             </p>
           </div>
         </div>
@@ -1358,6 +1374,106 @@ export default function App() {
       </section>
 
       {/* ================================================================= */}
+      {/* BOUTIQUE LOCATION & GOOGLE MAPS                                   */}
+      {/* ================================================================= */}
+      <section id="location" className="bg-[#E5E0D8]/35 border-t border-[#E5E0D8] py-20 sm:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+          <Reveal>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+              <div>
+                <p className="text-xs tracking-[0.24em] uppercase text-[#6E6A63] mb-2 flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-[#141414]" />
+                  Flagship Store &amp; Atelier
+                </p>
+                <h2 className="font-editorial text-3xl sm:text-5xl font-light">
+                  Visit ShreeJi Apparels
+                </h2>
+              </div>
+              <p className="text-xs sm:text-sm text-[#6E6A63] max-w-md leading-relaxed">
+                Experience our curated seasonal silhouettes, tactile natural fabrics, and bespoke atelier appointments in person.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* Store Information Card */}
+            <Reveal className="lg:col-span-5 flex flex-col justify-between bg-[#F9F8F6] p-7 sm:p-9 border border-[#E5E0D8] shadow-sm">
+              <div className="space-y-7">
+                <div>
+                  <span className="text-[10px] tracking-[0.24em] uppercase text-[#6E6A63] block mb-1.5 font-medium">
+                    Store Address
+                  </span>
+                  <h3 className="font-editorial text-2xl sm:text-3xl font-light mb-2">
+                    Shreeji Apparels
+                  </h3>
+                  <p className="text-sm text-[#141414]/85 leading-relaxed">
+                    Gaytree Puram Colony, Jhanjhari Block,
+                    <br />
+                    Gonda, Uttar Pradesh 271001, India
+                  </p>
+                </div>
+
+                <div className="pt-5 border-t border-[#E5E0D8] space-y-3.5">
+                  <div className="flex items-start gap-3 text-xs text-[#141414]/80">
+                    <Clock className="w-4 h-4 text-[#6E6A63] shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-[#141414]">Opening Hours</p>
+                      <p className="text-[#6E6A63] mt-0.5">Monday – Saturday: 10:00 AM – 8:30 PM</p>
+                      <p className="text-[#6E6A63]">Sunday: 11:00 AM – 7:00 PM</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 text-xs text-[#141414]/80 pt-2">
+                    <Sparkles className="w-4 h-4 text-[#6E6A63] shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-[#141414]">In-Store Services</p>
+                      <p className="text-[#6E6A63] mt-0.5">Custom Tailoring · Personal Styling · Fabric Consultations</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-[#E5E0D8] flex flex-col sm:flex-row gap-3">
+                <a
+                  href="https://maps.app.goo.gl/sPNFa2axQUCDRqHN7"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-[#141414] text-[#F9F8F6] px-6 py-3.5 text-xs tracking-[0.18em] uppercase font-medium hover:bg-[#2c2c2c] active:scale-[0.98] transition-all text-center"
+                >
+                  <Navigation className="w-3.5 h-3.5" />
+                  Get Directions
+                </a>
+                <a
+                  href="https://maps.app.goo.gl/sPNFa2axQUCDRqHN7"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 border border-[#141414]/30 text-[#141414] px-5 py-3.5 text-xs tracking-[0.16em] uppercase hover:bg-[#141414]/5 active:scale-[0.98] transition-all text-center"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  Google Maps
+                </a>
+              </div>
+            </Reveal>
+
+            {/* Interactive Embedded Google Map */}
+            <Reveal delay={120} className="lg:col-span-7 overflow-hidden border border-[#E5E0D8] shadow-sm relative min-h-[380px] sm:min-h-[440px] bg-[#E5E0D8]/50">
+              <iframe
+                title="ShreeJi Apparels Google Map Location"
+                src="https://maps.google.com/maps?q=Shreeji+Apparels,+Gaytree+Puram+Colony,+Jhanjhari+Block,+Gonda,+Uttar+Pradesh+271001&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                className="w-full h-full min-h-[380px] sm:min-h-[440px] border-0"
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+              <div className="absolute top-3 left-3 pointer-events-none bg-[#F9F8F6]/90 backdrop-blur-xs px-3 py-1.5 text-[10px] tracking-[0.18em] uppercase text-[#141414] border border-[#141414]/10 shadow-sm hidden sm:block">
+                📍 Shreeji Apparels · Gonda, UP
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================================= */}
       {/* ATELIER FOOTER WITH ANIMATED NEWSLETTER                           */}
       {/* ================================================================= */}
       <footer className="bg-[#141414] text-[#F9F8F6] pt-20 pb-12">
@@ -1406,15 +1522,25 @@ export default function App() {
 
             <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8 text-xs">
               <div>
-                <p className="tracking-[0.2em] uppercase text-[#E5E0D8]/50 mb-4">
-                  Boutiques
+                <p className="tracking-[0.2em] uppercase text-[#E5E0D8]/50 mb-4 flex items-center gap-1.5">
+                  <MapPin className="w-3 h-3 text-[#E5E0D8]/70" />
+                  Boutique &amp; Store
                 </p>
-                <ul className="space-y-2.5 text-[#E5E0D8]/80">
-                  <li>Paris — Le Marais</li>
-                  <li>Milan — Brera</li>
-                  <li>Tokyo — Aoyama</li>
-                  <li>New York — SoHo</li>
-                </ul>
+                <div className="text-[#E5E0D8]/80 space-y-1.5 leading-relaxed">
+                  <p className="font-medium text-[#F9F8F6]">Shreeji Apparels</p>
+                  <p>Gaytree Puram Colony,</p>
+                  <p>Jhanjhari Block, Gonda,</p>
+                  <p>Uttar Pradesh 271001</p>
+                  <a
+                    href="https://maps.app.goo.gl/sPNFa2axQUCDRqHN7"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[#E5E0D8] underline underline-offset-4 hover:text-white pt-2 text-[11px] uppercase tracking-wider transition-colors"
+                  >
+                    <span>Open in Google Maps</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
               </div>
               <div>
                 <p className="tracking-[0.2em] uppercase text-[#E5E0D8]/50 mb-4">
