@@ -1,4 +1,4 @@
-# VÉRITÉ STUDIO — Editorial Fashion Storefront
+# ShreeJi Apparels — Editorial Fashion Storefront
 
 A minimalist luxury clothing brand web application built with **React**, **Vite**, **Tailwind CSS**, and **Lucide React**.
 

@@ -162,7 +162,7 @@ const PRODUCTS = [
     badge: null,
     fabric: '100% Extra-Fine Combed Merino Wool',
     description:
-      'Generously proportioned blanket scarf finished with hand-twisted fringe and a tonal woven VÉRITÉ STUDIO atelier label.',
+      'Generously proportioned blanket scarf finished with hand-twisted fringe and a tonal woven ShreeJi Apparels atelier label.',
     colors: [
       { name: 'Warm Stone', hex: '#D8D1C7' },
       { name: 'Obsidian', hex: '#141414' },
@@ -517,7 +517,7 @@ export default function App() {
             href="#"
             className="font-editorial text-2xl sm:text-3xl tracking-[0.22em] font-light uppercase"
           >
-            VÉRITÉ STUDIO
+            ShreeJi Apparels
           </a>
 
           {/* Right Utilities */}
@@ -622,7 +622,7 @@ export default function App() {
           <div>
             <div className="flex items-center justify-between pb-6 border-b border-[#E5E0D8]">
               <span className="font-editorial text-xl tracking-[0.2em]">
-                VÉRITÉ STUDIO
+                ShreeJi Apparels
               </span>
               <button
                 onClick={() => setMobileMenuOpen(false)}
@@ -1064,7 +1064,7 @@ export default function App() {
               Designed to outlast seasons, not chase them.
             </h2>
             <p className="mt-5 text-sm text-[#6E6A63] leading-relaxed">
-              Every VÉRITÉ STUDIO garment is cut in numbered runs with
+              Every ShreeJi Apparels garment is cut in numbered runs with
               family-owned mills across Italy, Japan, and France. We eliminate
               synthetic blends in favor of biodegradable natural fibers and
               lifetime atelier repair.
@@ -1096,7 +1096,7 @@ export default function App() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16 border-b border-white/10">
             <div className="lg:col-span-5">
               <p className="font-editorial text-3xl tracking-[0.2em] uppercase mb-4">
-                VÉRITÉ STUDIO
+                ShreeJi Apparels
               </p>
               <p className="text-sm text-[#E5E0D8]/70 max-w-sm leading-relaxed">
                 Receive private invitations to seasonal archive sales, atelier
@@ -1173,7 +1173,7 @@ export default function App() {
           </div>
 
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] tracking-[0.14em] uppercase text-[#E5E0D8]/45">
-            <p>© {new Date().getFullYear()} VÉRITÉ STUDIO. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} ShreeJi Apparels. All rights reserved.</p>
             <div className="flex items-center gap-6">
               <span>Privacy</span>
               <span>Terms</span>
