@@ -1,0 +1,243 @@
+import React from 'react';
+
+export default function BrandLogo({ className = 'h-12 w-auto' }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 400 355"
+      role="img"
+      aria-label="ShreeJi Apparels"
+      className={className}
+      style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
+    >
+      <defs>
+        <style>
+          {`
+            .sj-brand-title {
+              font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+              font-weight: 600;
+              font-size: 86px;
+              letter-spacing: 1px;
+            }
+            .sj-brand-sub {
+              font-family: 'Montserrat', 'DM Sans', 'Segoe UI', Arial, sans-serif;
+              font-weight: 600;
+              font-size: 22px;
+              letter-spacing: 10px;
+            }
+          `}
+        </style>
+
+        {/* Metallic Gold Gradients */}
+        <linearGradient id="sj-gold-h" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#876A38" />
+          <stop offset="25%" stopColor="#C9A86A" />
+          <stop offset="50%" stopColor="#EBD69C" />
+          <stop offset="75%" stopColor="#B89452" />
+          <stop offset="100%" stopColor="#8B6C3A" />
+        </linearGradient>
+
+        <linearGradient id="sj-gold-d" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#E6CF92" />
+          <stop offset="50%" stopColor="#BA9756" />
+          <stop offset="100%" stopColor="#7D6030" />
+        </linearGradient>
+
+        {/* Deep Navy Gradient */}
+        <linearGradient id="sj-navy" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#294B87" />
+          <stop offset="55%" stopColor="#1A3260" />
+          <stop offset="100%" stopColor="#102040" />
+        </linearGradient>
+      </defs>
+
+      {/* ==================== EMBLEM ==================== */}
+      <g id="sj-emblem">
+        {/* Clothes Hanger */}
+        <g fill="none" stroke="url(#sj-gold-d)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.8">
+          <path d="M 232 62 C 232 53, 244 53, 244 61 C 244 66, 238 68, 238 73" />
+          <path d="M 238 73 L 207 95 C 204 97, 205 101, 210 101 L 266 101 C 271 101, 272 97, 269 95 Z" />
+        </g>
+
+        {/* Right-Side Gold & Navy Flourishes */}
+        <g>
+          <path d="M 248 134 C 261 125, 269 115, 267 107 C 262 115, 255 123, 246 128 Z" fill="url(#sj-gold-d)" />
+          <path d="M 251 146 C 266 139, 273 129, 272 122 C 266 131, 258 137, 249 141 Z" fill="url(#sj-gold-d)" />
+          <path d="M 248 176 C 261 172, 270 165, 271 156 C 264 163, 256 168, 248 170 Z" fill="url(#sj-gold-d)" />
+          <path d="M 243 194 C 256 189, 265 180, 266 170 C 259 179, 251 185, 243 188 Z" fill="url(#sj-gold-d)" />
+          <path d="M 233 206 C 246 202, 254 195, 258 186 C 250 193, 242 198, 233 200 Z" fill="url(#sj-gold-d)" />
+          <path
+            d="M 249 152 C 262 147, 269 156, 263 165 C 259 171, 250 168, 251 162 C 252 158, 257 158, 258 161"
+            fill="none"
+            stroke="url(#sj-navy)"
+            strokeWidth="3.2"
+            strokeLinecap="round"
+          />
+        </g>
+
+        {/* Left-Side Gold Outer Swirls */}
+        <g fill="url(#sj-gold-d)">
+          <path d="M 156 84 C 145 95, 138 108, 136 122 C 142 111, 149 101, 158 92 Z" />
+          <path d="M 145 109 C 134 120, 129 133, 129 145 C 135 134, 140 125, 148 117 Z" />
+          <path d="M 139 136 C 130 149, 129 163, 135 178 C 136 165, 138 154, 144 144 Z" />
+          <path d="M 144 167 C 139 180, 143 192, 154 203 C 150 191, 148 181, 151 172 Z" />
+        </g>
+
+        {/* Peacock Crest */}
+        <g>
+          <path d="M 199 48 C 189 37, 187 23, 192 13 C 201 20, 208 32, 204 47 Z" fill="url(#sj-navy)" />
+          <path d="M 197 44 C 193 35, 192 26, 194 19 C 199 25, 203 33, 201 43 Z" fill="url(#sj-gold-d)" />
+          <circle cx="196" cy="28" r="2.4" fill="url(#sj-navy)" />
+          <path
+            d="M 204 48 C 208 39, 215 36, 217 41 C 218 45, 213 47, 211 44"
+            fill="none"
+            stroke="url(#sj-navy)"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+          />
+          <path
+            d="M 193 47 C 187 38, 183 33, 186 26"
+            fill="none"
+            stroke="url(#sj-navy)"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </g>
+
+        {/* Peacock Head, Neck & Flowing Gold 'S' */}
+        <g>
+          {/* Gold 'S' Ribbon */}
+          <path
+            d="M 168 72
+               C 150 90, 151 118, 177 134
+               C 201 149, 214 161, 209 181
+               C 204 198, 184 206, 165 199
+               C 179 200, 196 193, 199 179
+               C 203 165, 191 153, 170 140
+               C 145 124, 143 93, 163 70 Z"
+            fill="url(#sj-gold-d)"
+          />
+
+          {/* Navy Peacock Body */}
+          <path
+            d="M 202 49
+               C 210 51, 213 58, 212 65
+               L 218 73
+               L 208 69
+               C 203 68, 198 65, 196 61
+               C 188 63, 183 71, 183 83
+               C 183 97, 194 106, 207 118
+               C 222 132, 227 152, 218 173
+               C 211 190, 197 204, 178 207
+               C 196 200, 208 186, 211 168
+               C 215 150, 204 138, 189 126
+               C 170 112, 163 95, 168 75
+               C 173 58, 187 47, 202 49 Z"
+            fill="url(#sj-navy)"
+          />
+
+          {/* Neck Highlight */}
+          <path
+            d="M 198 55 C 183 56, 174 70, 175 87 C 176 100, 185 111, 199 121"
+            fill="none"
+            stroke="#FFFFFF"
+            strokeWidth="3.4"
+            strokeLinecap="round"
+          />
+
+          {/* Eye */}
+          <circle cx="203" cy="58" r="2" fill="#FFFFFF" />
+          <circle cx="204" cy="58" r="1" fill="#1A3260" />
+
+          {/* Gold Wing Spiral */}
+          <path
+            d="M 190 99
+               C 203 97, 213 108, 210 120
+               C 208 130, 196 134, 189 128
+               C 183 123, 184 113, 191 111
+               C 196 110, 201 115, 198 120
+               C 195 123, 190 122, 190 119"
+            fill="none"
+            stroke="url(#sj-gold-d)"
+            strokeWidth="3.2"
+            strokeLinecap="round"
+          />
+
+          {/* Wing Accents */}
+          <path d="M 209 115 C 217 120, 224 127, 227 135" fill="none" stroke="url(#sj-gold-d)" strokeWidth="2.1" strokeLinecap="round" />
+          <path d="M 206 123 C 214 128, 220 136, 224 144" fill="none" stroke="url(#sj-navy)" strokeWidth="1.9" strokeLinecap="round" />
+        </g>
+
+        {/* Left Lower Navy Paisley Scroll */}
+        <g fill="none" stroke="url(#sj-navy)" strokeLinecap="round">
+          <path d="M 141 143 C 129 163, 138 197, 168 208 C 184 213, 201 209, 208 197" strokeWidth="4" />
+          <path
+            d="M 149 152
+               C 140 170, 150 194, 173 197
+               C 189 199, 196 184, 189 172
+               C 183 161, 168 162, 164 172
+               C 162 180, 169 186, 176 182
+               C 180 180, 179 174, 175 174"
+            strokeWidth="3.5"
+          />
+          <path d="M 141 131 C 131 126, 132 113, 141 113 C 148 113, 150 119, 146 124" strokeWidth="2.9" />
+        </g>
+
+        {/* Ornate Letter 'J' */}
+        <g>
+          <path
+            d="M 230 116
+               L 253 116
+               L 253 120
+               C 248 121, 246 124, 246 131
+               L 246 180
+               C 246 202, 230 219, 206 219
+               C 192 219, 183 213, 183 206
+               C 183 200, 188 198, 193 200
+               C 196 203, 195 210, 202 212
+               C 218 214, 235 201, 235 179
+               L 235 131
+               C 235 124, 233 121, 230 120 Z"
+            fill="url(#sj-navy)"
+          />
+
+          {/* Bottom Gold Tail Feathers */}
+          <path d="M 216 175 C 225 181, 227 192, 220 199 C 218 192, 217 185, 214 179 Z" fill="url(#sj-gold-d)" />
+          <path d="M 206 188 C 213 194, 213 203, 206 209 C 205 202, 205 195, 204 191 Z" fill="url(#sj-gold-d)" />
+        </g>
+
+        {/* Diagonal Sewing Needle & Thread */}
+        <g>
+          <path d="M 263 76 L 214 134" stroke="#FFFFFF" strokeWidth="6.5" strokeLinecap="round" />
+          <path d="M 262 75 C 264 77, 264 80, 261 83 L 213 135 L 256 77 C 258 75, 260 74, 262 75 Z" fill="url(#sj-navy)" />
+          <ellipse cx="258" cy="82" rx="1.4" ry="4" transform="rotate(42 258 82)" fill="#FFFFFF" />
+          <path
+            d="M 259 83 C 268 95, 268 111, 256 125 C 247 134, 233 141, 218 140"
+            fill="none"
+            stroke="url(#sj-navy)"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </g>
+      </g>
+
+      {/* ==================== TYPOGRAPHY ==================== */}
+      <g textAnchor="middle">
+        <text x="200" y="294" className="sj-brand-title" fill="url(#sj-gold-h)">
+          ShreeJi
+        </text>
+        {/* Signature flourish under 'h' and 'r' */}
+        <path
+          d="M 140 298 C 154 307, 174 307, 188 298"
+          fill="none"
+          stroke="url(#sj-gold-h)"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+        />
+        <text x="204" y="338" className="sj-brand-sub" fill="#1A3260">
+          APPARELS
+        </text>
+      </g>
+    </svg>
+  );
+}

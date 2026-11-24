@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import BrandLogo from './components/BrandLogo';
 import {
   Search,
   ShoppingBag,
@@ -535,11 +536,7 @@ export default function App() {
               href="#"
               className="flex items-center gap-2.5 sm:gap-3 group select-none py-1"
             >
-              <img
-                src="/logo.png"
-                alt="ShreeJi Apparels Logo"
-                className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm"
-              />
+              <BrandLogo className="h-[90px] sm:h-[110px] w-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" />
               <span className="font-editorial text-lg sm:text-2xl md:text-3xl tracking-[0.14em] sm:tracking-[0.2em] font-light uppercase truncate max-w-[160px] xs:max-w-none">
                 ShreeJi Apparels
               </span>
@@ -716,11 +713,7 @@ export default function App() {
           <div>
             <div className="flex items-center justify-between pb-5 border-b border-[#E5E0D8]">
               <div className="flex items-center gap-2.5">
-                <img
-                  src="/logo.png"
-                  alt="ShreeJi Apparels"
-                  className="h-9 w-auto object-contain"
-                />
+                <BrandLogo className="h-14 w-auto" />
                 <span className="font-editorial text-xl tracking-[0.18em]">
                   ShreeJi Apparels
                 </span>
@@ -1418,11 +1411,7 @@ export default function App() {
                     Store Address
                   </span>
                   <div className="flex items-center gap-3 mb-2">
-                    <img
-                      src="/logo.png"
-                      alt="ShreeJi Apparels Logo"
-                      className="h-10 sm:h-12 w-auto object-contain"
-                    />
+                    <BrandLogo className="h-16 sm:h-20 w-auto" />
                     <h3 className="font-editorial text-2xl sm:text-3xl font-light">
                       Shreeji Apparels
                     </h3>
@@ -1502,11 +1491,9 @@ export default function App() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16 border-b border-white/10">
             <div className="lg:col-span-5">
               <div className="flex items-center gap-3 mb-4">
-                <img
-                  src="/logo.png"
-                  alt="ShreeJi Apparels"
-                  className="h-12 sm:h-14 w-auto object-contain bg-white/10 rounded-sm p-1.5 backdrop-blur-xs"
-                />
+                <div className="bg-white/10 rounded-sm p-2.5 backdrop-blur-xs">
+                  <BrandLogo className="h-20 sm:h-28 w-auto" />
+                </div>
                 <p className="font-editorial text-2xl sm:text-3xl tracking-[0.18em] uppercase">
                   ShreeJi Apparels
                 </p>
